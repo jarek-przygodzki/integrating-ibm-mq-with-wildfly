@@ -1,0 +1,27 @@
+embed-server --server-config=${server.config:standalone-full.xml} --std-out=echo
+
+# https://www.ibm.com/support/knowledgecenter/en/SSFKSJ_9.0.0/com.ibm.mq.dev.doc/q129260_.htm
+# https://developer.jboss.org/thread/274927
+if (outcome != success) of /subsystem=resource-adapters/resource-adapter=wmq.jmsra.rar/:read-resource
+	# legal values for transaction-support are [NoTransaction, LocalTransaction, XATransaction]
+	/subsystem=resource-adapters/resource-adapter=wmq.jmsra.rar:add(archive=wmq.jmsra.rar, transaction-support=NoTransaction)
+	/subsystem=resource-adapters/resource-adapter=wmq.jmsra.rar/connection-definitions=mq-cd:add(class-name=com.ibm.mq.connector.outbound.ManagedConnectionFactoryImpl, jndi-name=java:jboss/IbmMqConnectionFactory)
+    /subsystem=resource-adapters/resource-adapter=wmq.jmsra.rar/connection-definitions=mq-cd/config-properties=channel:add(value=${websphere.channel})
+    /subsystem=resource-adapters/resource-adapter=wmq.jmsra.rar/connection-definitions=mq-cd/config-properties=transportType:add(value=${websphere.transportType:CLIENT})
+    /subsystem=resource-adapters/resource-adapter=wmq.jmsra.rar/connection-definitions=mq-cd/config-properties=queueManager:add(value=${websphere.queueManager})
+    /subsystem=resource-adapters/resource-adapter=wmq.jmsra.rar/connection-definitions=mq-cd/config-properties=connectionNameList:add(value=${websphere.connectionNameList})
+    /subsystem=resource-adapters/resource-adapter=wmq.jmsra.rar/connection-definitions=mq-cd/config-properties=username:add(value=${websphere.username})
+    /subsystem=resource-adapters/resource-adapter=wmq.jmsra.rar/connection-definitions=mq-cd/config-properties=password:add(value=${websphere.password})
+
+    /subsystem=resource-adapters/resource-adapter=wmq.jmsra.rar/admin-objects=queue-ao:add(class-name=com.ibm.mq.connector.outbound.MQQueueProxy, jndi-name=java:jboss/test)
+    /subsystem=resource-adapters/resource-adapter=wmq.jmsra.rar/admin-objects=queue-ao/config-properties=baseQueueName:add(value=${websphere.queueName})
+
+    /system-property=websphere.channel:add(value="DEV.ADMIN.SVRCONN")
+    /system-property=websphere.queueManager:add(value="QM1")
+    /system-property=websphere.connectionNameList:add(value="ibmmq (1414)")
+    /system-property=websphere.username:add(value="admin")
+    /system-property=websphere.password:add(value="passw0rd")
+    /system-property=websphere.queueName:add(value="DEV.QUEUE.1")
+    /system-property=websphere.resource.adapter:add(value="wmq.jmsra.rar")
+end-if
+

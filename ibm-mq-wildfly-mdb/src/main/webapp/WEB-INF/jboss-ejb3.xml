@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jboss:ejb-jar xmlns:jboss="http://www.jboss.com/xml/ns/javaee"
+               xmlns="http://java.sun.com/xml/ns/javaee"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="http://www.jboss.com/xml/ns/javaee http://www.jboss.org/j2ee/schema/jboss-ejb3-2_0.xsd
+                  http://java.sun.com/xml/ns/javaee http://www.jboss.org/j2ee/schema/jboss-ejb3-spec-2_0.xsd"
+               xmlns:mdb="urn:resource-adapter-binding" version="3.1" impl-version="2.0">
+
+    <jboss:enterprise-beans>
+        <message-driven>
+            <ejb-name>IbmMqConsumerMDB</ejb-name>
+            <ejb-class>ibm.mq.client.mdb.IbmMqConsumerMDB</ejb-class>
+            <transaction-type>Container</transaction-type>
+            <message-destination-type>javax.jms.Queue</message-destination-type>
+            <activation-config>
+                <activation-config-property>
+                    <activation-config-property-name>channel</activation-config-property-name>
+                    <activation-config-property-value>${websphere.channel}</activation-config-property-value>
+                </activation-config-property>
+                <activation-config-property>
+                    <activation-config-property-name>queueManager</activation-config-property-name>
+                    <activation-config-property-value>${websphere.queueManager}</activation-config-property-value>
+                </activation-config-property>
+                <activation-config-property>
+                    <activation-config-property-name>transportType</activation-config-property-name>
+                    <activation-config-property-value>${websphere.transportType:CLIENT}</activation-config-property-value>
+                </activation-config-property>
+                <activation-config-property>
+                    <activation-config-property-name>connectionNameList</activation-config-property-name>
+                    <activation-config-property-value>${websphere.connectionNameList}</activation-config-property-value>
+                </activation-config-property>
+                 <activation-config-property>
+                    <activation-config-property-name>username</activation-config-property-name>
+                    <activation-config-property-value>${websphere.username}</activation-config-property-value>
+                </activation-config-property>
+                 <activation-config-property>
+                    <activation-config-property-name>password</activation-config-property-name>
+                    <activation-config-property-value>${websphere.password}</activation-config-property-value>
+                </activation-config-property>
+            </activation-config>
+        </message-driven>
+    </jboss:enterprise-beans>
+    <assembly-descriptor>
+        <mdb:resource-adapter-binding>
+            <ejb-name>IbmMqConsumerMDB</ejb-name>
+            <mdb:resource-adapter-name>${websphere.resource.adapter}</mdb:resource-adapter-name>
+        </mdb:resource-adapter-binding>
+    </assembly-descriptor>
+</jboss:ejb-jar>

@@ -1,0 +1,14 @@
+version: '3'
+services:
+  ibmmq:
+    image: "ibmcom/mq:9.1.3.0"
+    environment:
+      - LICENSE=accept
+      - MQ_QMGR_NAME=QM1
+    ports:
+      - 1414:1414
+      - 9443:9443
+  web:
+    build: .
+    ports:
+      - 8080:8080
